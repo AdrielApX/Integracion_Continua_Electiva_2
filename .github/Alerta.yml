@@ -1,0 +1,26 @@
+name: Notificar push a main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener datos del commit
+        run: |
+          AUTHOR_NAME=$(git log -1 --pretty=format:'%an')
+          COMMIT_SHA=${{ github.sha }}
+          COMMIT_URL="https://github.com/${{ github.repository }}/commit/${COMMIT_SHA}"
+          COMMIT_MSG=$(git log -1 --pretty=format:'%s')
+
+          BODY="El usuario *${AUTHOR_NAME}* ha subido cambios a **main**.\n\n🛠️ Mensaje: \"${COMMIT_MSG}\"\n🔗 Ver commit: ${COMMIT_URL}"
+
+          curl -H "Title: 🚀 Push a main" \
+               -H "Priority: 5" \
+               -H "Tags: bell,warning" \
+               -H "Content-Type: text/markdown" \
+               -d "${BODY}" \
+               https://ntfy.sh/devops-itla
