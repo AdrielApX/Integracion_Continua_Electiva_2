@@ -1,19 +1,23 @@
-name: Notificar Push a NTFY
+name: Notificar push a ntfy.sh
 
 on:
   push:
     branches:
       - main
-      - master
 
 jobs:
   notificar:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Obtener datos del commit
+        run: |
+          echo "COMMIT_URL=${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_ENV
+
       - name: Enviar notificación a ntfy.sh
         run: |
-          curl -H "Title: 🚨 Push Detectado" \
+          curl -H "Title: 🚀 Push recibido" \
                -H "Priority: 4" \
-               -H "Tags: github,rocket" \
-               -d "Se ha hecho push a ${{ github.ref_name }} en el repo ${{ github.repository }} por el usuario ${{ github.actor }} 🚀" \
+               -d "El usuario ${{ github.actor }} ha subido cambios al repositorio ${{ github.repository }}. Revisa el commit aquí: ${{ env.COMMIT_URL }}" \
                https://ntfy.sh/devops-itla
+               
