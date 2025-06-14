@@ -1,19 +1,12 @@
-name: Notificación personalizada a ntfy.sh
-
-on:
-  push:
-    branches:
-      - master
-
-jobs:
-  notificar:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Enviar notificación personalizada
-        run: |
-          curl -H "Title:  Push detectado" \
-               -H "Priority: 5" \
-               -H "Tags: code,upload" \
-               -H "Content-Type: text/plain" \
-               -d "Se ha hecho push a la rama master del repositorio AdrielApX/Integracion_Continua_Electiva2" \
-               https://ntfy.sh/devops-itla
+- name: Enviar notificación personalizada
+  run: |
+    REPO="AdrielApX/Integracion_Continua_Electiva2"
+    BRANCH=${GITHUB_REF##*/}
+    ACTOR=${{ github.actor }}
+    
+    curl -H "Title: Push realizado" \
+         -H "Priority: 4" \
+         -H "Tags: rocket,devops" \
+         -H "Content-Type: text/plain" \
+         -d "Se ha hecho push a ${BRANCH} en el repo ${REPO} por el usuario ${ACTOR} 🚀" \
+         https://ntfy.sh/devops-itla
