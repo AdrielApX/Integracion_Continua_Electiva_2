@@ -1,26 +1,19 @@
-name: Notificar push a main
+name: Notificación personalizada a ntfy.sh
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   notificar:
     runs-on: ubuntu-latest
     steps:
-      - name: Obtener datos del commit
+      - name: Enviar notificación personalizada
         run: |
-          AUTHOR_NAME=$(git log -1 --pretty=format:'%an')
-          COMMIT_SHA=${{ github.sha }}
-          COMMIT_URL="https://github.com/${{ github.repository }}/commit/${COMMIT_SHA}"
-          COMMIT_MSG=$(git log -1 --pretty=format:'%s')
-
-          BODY="El usuario *${AUTHOR_NAME}* ha subido cambios a **main**.\n\n🛠️ Mensaje: \"${COMMIT_MSG}\"\n🔗 Ver commit: ${COMMIT_URL}"
-
-          curl -H "Title: 🚀 Push a main" \
+          curl -H "Title:  Push detectado" \
                -H "Priority: 5" \
-               -H "Tags: bell,warning" \
-               -H "Content-Type: text/markdown" \
-               -d "${BODY}" \
+               -H "Tags: code,upload" \
+               -H "Content-Type: text/plain" \
+               -d "Se ha hecho push a la rama master del repositorio AdrielApX/Integracion_Continua_Electiva2" \
                https://ntfy.sh/devops-itla
